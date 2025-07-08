@@ -1,0 +1,107 @@
+
+Task: Build a Natural Language to Pinecone Query Agent (Schema-Limited)
+
+Objective: Develop an agent that takes a natural language input and generates a valid Pinecone query using vector search and optional metadata filtering. The metadata schema available includes:
+	•	published_date: any (e.g., filter by year/month/day)
+	•	Note: You can further break this down to published_day, published_month and published_year for indexing convenience.
+	•	The type will be dependent on the format used - if you use published_day, published_month and published_year - all will be int. 
+	•	author: string (e.g., filter by name) 
+	•	tags: list (e.g., filter by topic/category tags) 
+Sample Inputs:
+	•	“Show me articles by Alice Zhang from last year about machine learning.” 
+	•	“Find posts tagged with ‘LLMs’ published in June, 2023.” 
+	•	“Anything by John Doe on vector search?” 
+
+
+
+
+
+
+
+
+Sample Outputs:
+	•	Filter 1:
+{
+    "author": "Alice Zhang",
+    "published_date": {
+      "$gte": "2024-01-01",
+      "$lt": "2025-01-01"
+    },
+    "tags": {
+      "$in": [
+        "machine learning"
+      ]
+    }
+}
+
+Note: If you have used: published_day, published_month and published_year format: (using published_day and published_month here would be redundant)
+{
+  "author": "Alice Zhang",
+  "published_year": {
+    "$eq": 2024
+  },
+  "tags": {
+    "$in": [
+      "machine learning"
+    ]
+  }
+}
+
+
+
+
+	•	Filter 2: 
+{
+  "tags": {
+    "$in": [
+      "LLM"
+    ]
+  },
+  "published_year": {
+    "$eq": "2023-06-01",
+    "$lt": "2024-06-30"
+  }
+}
+
+Note: If you have used: published_day, published_month and published_year format: (using published_day here would be redundant)
+{
+  "tags": {
+    "$in": [
+      "LLM"
+    ]
+  },
+  "published_year": {
+    "$eq": 2023
+  },
+  "published_month": {
+    "$eq": 06
+  }
+}
+
+
+
+
+	•	Filter 3: 
+{
+  "author": "John Doe",
+  "tags": {
+    "$in": [
+      "vector search"
+    ]
+  }
+}
+
+Deliverables:
+	•	A working prototype of the agent (script, API, or notebook).
+	•	The final response has to be a dictionary/JSON
+	•	Results for sample test cases with corresponding output results. Documentation explaining the architecture and approach.
+	•	Create a public git repo named “bridged-demo” and push it to the main branch. Add the necessary requirements into requirements.txt and the steps for env set up and 
+	•	Send your git repo URL to rithvik@bridged.media with the Subject: “AI Hire task”. Please use this dataset when indexing into Pinecone.
+	•	Please feel free to share the progress even if you couldn’t meet the deadline.
+Brownie Points:
+	•	Dockerfile for dockerizing the app into a FastAPI app.
+	•	Using tools like uv / poetry to manage and run the demo.
+Important Note:
+	•	Please submit your project before 15/07/2025. Feel free to share the progress even if you couldn’t meet the deadline.
+	•	You can use any vendor(OpenAI / Anthropic / any other vendor) apis for the inferencing.
+	•	The objective here is to implement your own agent, but if that is not possible, look into Langchain SQR. This does the job for you, but higher priority will be given to your own agents.

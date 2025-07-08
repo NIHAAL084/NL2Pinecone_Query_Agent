@@ -1,0 +1,458 @@
+{
+  "test_info": {
+    "total_queries": 15,
+    "processing_time": 16.75965905189514,
+    "avg_time_per_query": 1.117310603459676,
+    "exact_matches": 15,
+    "partial_matches": 0,
+    "mismatches": 0,
+    "samples_with_expected": 15
+  },
+  "batch_result": {
+    "results": [
+      {
+        "original_query": "Show me articles by Alice Zhang from last year about machine learning.",
+        "pinecone_filter": {
+          "author": "Alice Zhang",
+          "tags": {
+            "$in": [
+              "machine learning"
+            ]
+          },
+          "published_year": {
+            "$eq": 2024
+          }
+        },
+        "is_valid": true,
+        "timestamp": "2025-07-09T00:05:27.336475"
+      },
+      {
+        "original_query": "Find posts tagged with 'LLMs' published in June, 2023.",
+        "pinecone_filter": {
+          "tags": {
+            "$in": [
+              "LLMs"
+            ]
+          },
+          "published_year": {
+            "$eq": 2023
+          },
+          "published_month": {
+            "$eq": 6
+          }
+        },
+        "is_valid": true,
+        "timestamp": "2025-07-09T00:05:28.402418"
+      },
+      {
+        "original_query": "Anything by John Doe on vector search?",
+        "pinecone_filter": {
+          "author": "John Doe",
+          "tags": {
+            "$in": [
+              "vector search"
+            ]
+          }
+        },
+        "is_valid": true,
+        "timestamp": "2025-07-09T00:05:29.231360"
+      },
+      {
+        "original_query": "Find articles tagged with 'AI' and 'deep learning' from March 2023.",
+        "pinecone_filter": {
+          "tags": {
+            "$in": [
+              "AI",
+              "deep learning"
+            ]
+          },
+          "published_year": {
+            "$eq": 2023
+          },
+          "published_month": {
+            "$eq": 3
+          }
+        },
+        "is_valid": true,
+        "timestamp": "2025-07-09T00:05:30.608909"
+      },
+      {
+        "original_query": "Show me posts by Emma Johnson published on 2024-07-15.",
+        "pinecone_filter": {
+          "author": "Emma Johnson",
+          "published_year": {
+            "$eq": 2024
+          },
+          "published_month": {
+            "$eq": 7
+          },
+          "published_day": {
+            "$eq": 15
+          }
+        },
+        "is_valid": true,
+        "timestamp": "2025-07-09T00:05:31.534831"
+      },
+      {
+        "original_query": "Articles about 'knowledge graphs' from 2022.",
+        "pinecone_filter": {
+          "tags": {
+            "$in": [
+              "knowledge graphs"
+            ]
+          },
+          "published_year": {
+            "$eq": 2022
+          }
+        },
+        "is_valid": true,
+        "timestamp": "2025-07-09T00:05:32.559218"
+      },
+      {
+        "original_query": "Papers by Priya Patel on transformers.",
+        "pinecone_filter": {
+          "author": "Priya Patel",
+          "tags": {
+            "$in": [
+              "transformers"
+            ]
+          }
+        },
+        "is_valid": true,
+        "timestamp": "2025-07-09T00:05:33.437453"
+      },
+      {
+        "original_query": "Any retrieval or NLP articles by David Kim from December 2023?",
+        "pinecone_filter": {
+          "author": "David Kim",
+          "tags": {
+            "$in": [
+              "retrieval",
+              "NLP"
+            ]
+          },
+          "published_year": {
+            "$eq": 2023
+          },
+          "published_month": {
+            "$eq": 12
+          }
+        },
+        "is_valid": true,
+        "timestamp": "2025-07-09T00:05:34.901962"
+      },
+      {
+        "original_query": "Show me all posts tagged with 'search' and 'vector search' from 2025-01-10.",
+        "pinecone_filter": {
+          "tags": {
+            "$in": [
+              "search",
+              "vector search"
+            ]
+          },
+          "published_year": {
+            "$eq": 2025
+          },
+          "published_month": {
+            "$eq": 1
+          },
+          "published_day": {
+            "$eq": 10
+          }
+        },
+        "is_valid": true,
+        "timestamp": "2025-07-09T00:05:35.963069"
+      },
+      {
+        "original_query": "Articles by Olivia Lee about LLMs from this year.",
+        "pinecone_filter": {
+          "author": "Olivia Lee",
+          "tags": {
+            "$in": [
+              "LLMs"
+            ]
+          },
+          "published_year": {
+            "$eq": 2025
+          }
+        },
+        "is_valid": true,
+        "timestamp": "2025-07-09T00:05:36.883531"
+      },
+      {
+        "original_query": "articles by john doe",
+        "pinecone_filter": {
+          "author": "john doe"
+        },
+        "is_valid": true,
+        "timestamp": "2025-07-09T00:05:37.804759"
+      },
+      {
+        "original_query": "posts about AI last month",
+        "pinecone_filter": {
+          "tags": {
+            "$in": [
+              "AI"
+            ]
+          },
+          "published_year": {
+            "$eq": 2025
+          },
+          "published_month": {
+            "$eq": 6
+          }
+        },
+        "is_valid": true,
+        "timestamp": "2025-07-09T00:05:38.931061"
+      },
+      {
+        "original_query": "research on neural networks from 2020",
+        "pinecone_filter": {
+          "tags": {
+            "$in": [
+              "neural networks"
+            ]
+          },
+          "published_year": {
+            "$eq": 2020
+          }
+        },
+        "is_valid": true,
+        "timestamp": "2025-07-09T00:05:39.917112"
+      },
+      {
+        "original_query": "anything tagged with machine learning",
+        "pinecone_filter": {
+          "tags": {
+            "$in": [
+              "machine learning"
+            ]
+          }
+        },
+        "is_valid": true,
+        "timestamp": "2025-07-09T00:05:40.805636"
+      },
+      {
+        "original_query": "posts from January 2024",
+        "pinecone_filter": {
+          "published_year": {
+            "$eq": 2024
+          },
+          "published_month": {
+            "$eq": 1
+          }
+        },
+        "is_valid": true,
+        "timestamp": "2025-07-09T00:05:42.035382"
+      }
+    ],
+    "total_processed": 15
+  },
+  "samples": [
+    {
+      "query": "Show me articles by Alice Zhang from last year about machine learning.",
+      "expected_filter": {
+        "author": "Alice Zhang",
+        "published_year": {
+          "$eq": 2024
+        },
+        "tags": {
+          "$in": [
+            "machine learning"
+          ]
+        }
+      }
+    },
+    {
+      "query": "Find posts tagged with 'LLMs' published in June, 2023.",
+      "expected_filter": {
+        "tags": {
+          "$in": [
+            "LLMs"
+          ]
+        },
+        "published_year": {
+          "$eq": 2023
+        },
+        "published_month": {
+          "$eq": 6
+        }
+      }
+    },
+    {
+      "query": "Anything by John Doe on vector search?",
+      "expected_filter": {
+        "author": "John Doe",
+        "tags": {
+          "$in": [
+            "vector search"
+          ]
+        }
+      }
+    },
+    {
+      "query": "Find articles tagged with 'AI' and 'deep learning' from March 2023.",
+      "expected_filter": {
+        "tags": {
+          "$in": [
+            "AI",
+            "deep learning"
+          ]
+        },
+        "published_year": {
+          "$eq": 2023
+        },
+        "published_month": {
+          "$eq": 3
+        }
+      }
+    },
+    {
+      "query": "Show me posts by Emma Johnson published on 2024-07-15.",
+      "expected_filter": {
+        "author": "Emma Johnson",
+        "published_year": {
+          "$eq": 2024
+        },
+        "published_month": {
+          "$eq": 7
+        },
+        "published_day": {
+          "$eq": 15
+        }
+      }
+    },
+    {
+      "query": "Articles about 'knowledge graphs' from 2022.",
+      "expected_filter": {
+        "tags": {
+          "$in": [
+            "knowledge graphs"
+          ]
+        },
+        "published_year": {
+          "$eq": 2022
+        }
+      }
+    },
+    {
+      "query": "Papers by Priya Patel on transformers.",
+      "expected_filter": {
+        "author": "Priya Patel",
+        "tags": {
+          "$in": [
+            "transformers"
+          ]
+        }
+      }
+    },
+    {
+      "query": "Any retrieval or NLP articles by David Kim from December 2023?",
+      "expected_filter": {
+        "author": "David Kim",
+        "tags": {
+          "$in": [
+            "retrieval",
+            "NLP"
+          ]
+        },
+        "published_year": {
+          "$eq": 2023
+        },
+        "published_month": {
+          "$eq": 12
+        }
+      }
+    },
+    {
+      "query": "Show me all posts tagged with 'search' and 'vector search' from 2025-01-10.",
+      "expected_filter": {
+        "tags": {
+          "$in": [
+            "search",
+            "vector search"
+          ]
+        },
+        "published_year": {
+          "$eq": 2025
+        },
+        "published_month": {
+          "$eq": 1
+        },
+        "published_day": {
+          "$eq": 10
+        }
+      }
+    },
+    {
+      "query": "Articles by Olivia Lee about LLMs from this year.",
+      "expected_filter": {
+        "author": "Olivia Lee",
+        "tags": {
+          "$in": [
+            "LLMs"
+          ]
+        },
+        "published_year": {
+          "$eq": 2025
+        }
+      }
+    },
+    {
+      "query": "articles by john doe",
+      "expected_filter": {
+        "author": "john doe"
+      }
+    },
+    {
+      "query": "posts about AI last month",
+      "expected_filter": {
+        "tags": {
+          "$in": [
+            "AI"
+          ]
+        },
+        "published_year": {
+          "$eq": 2025
+        },
+        "published_month": {
+          "$eq": 6
+        }
+      }
+    },
+    {
+      "query": "research on neural networks from 2020",
+      "expected_filter": {
+        "tags": {
+          "$in": [
+            "neural networks"
+          ]
+        },
+        "published_year": {
+          "$eq": 2020
+        }
+      }
+    },
+    {
+      "query": "anything tagged with machine learning",
+      "expected_filter": {
+        "tags": {
+          "$in": [
+            "machine learning"
+          ]
+        }
+      }
+    },
+    {
+      "query": "posts from January 2024",
+      "expected_filter": {
+        "published_year": {
+          "$eq": 2024
+        },
+        "published_month": {
+          "$eq": 1
+        }
+      }
+    }
+  ]
+}
