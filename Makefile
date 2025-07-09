@@ -1,7 +1,7 @@
 # Makefile for NL2Pinecone Query Agent
 # Uses uv for fast dependency management
 
-.PHONY: help setup install run test test-batch test-primary health clean dev docker-build docker-run docker-stop samples check-env
+.PHONY: help setup install run test test-batch test-primary health clean dev docker-build docker-run docker-stop samples check-env populate-db clear-db test-search test-all-endpoints
 
 help: ## Show this help message
 	@echo "🤖 NL2Pinecone Query Agent - Available Commands"
@@ -20,7 +20,13 @@ help: ## Show this help message
 	@echo "  test          - Run individual query tests"
 	@echo "  test-batch    - Run comprehensive batch tests (all samples)"
 	@echo "  test-primary  - Run primary requirement tests only"
+	@echo "  test-search   - Test vector search endpoints"
+	@echo "  test-all-endpoints - Test all API endpoints comprehensively"
 	@echo "  samples       - Show all test samples"
+	@echo ""
+	@echo "Database:"
+	@echo "  populate-db   - Generate and upload 100 samples to Pinecone"
+	@echo "  clear-db      - Delete all records from Pinecone database"
 	@echo ""
 	@echo "Code Quality:"
 	@echo "  lint          - Run code linting with ruff"
@@ -41,6 +47,7 @@ help: ## Show this help message
 	@echo "  env-create    - Create .env file from template"
 	@echo ""
 	@echo "💡 Make sure to set GEMINI_API_KEY in .env file!"
+	@echo "💡 For vector search features, also set PINECONE_API_KEY and PINECONE_INDEX!"
 
 # Setup and installation
 setup: ## Setup uv environment and install dependencies
@@ -96,6 +103,68 @@ samples: ## Show all test samples
 	@echo "📋 Available test samples:"
 	uv run python test_samples.py
 
+# Database operations
+populate-db: check-env ## Generate and upload 100 samples to Pinecone
+	@echo "🗄️  Populating Pinecone database with 100 Gemini-generated samples..."
+	@echo "⏰ This will take ~7 minutes due to Gemini rate limits (15 requests/minute)"
+	uv run python populate_pinecone_db.py
+
+clear-db: check-env ## Delete all records from Pinecone database
+	@echo "🗑️  Clearing all records from Pinecone database..."
+	@echo "⚠️  This will delete ALL data! Press Ctrl+C to cancel..."
+	@sleep 3
+	uv run python delete_records.py
+
+# Enhanced testing
+test-search: check-env ## Test vector search endpoints
+	@echo "🔍 Testing vector search endpoints..."
+	@echo "Test 1: Single vector search"
+	curl -s -X POST "http://localhost:8000/results" \
+		-H "Content-Type: application/json" \
+		-d '{"query": "articles by John Doe about AI", "top_k": 3}' | jq .
+	@echo "\nTest 2: Batch vector search"
+	curl -s -X POST "http://localhost:8000/batch-results" \
+		-H "Content-Type: application/json" \
+		-d '{"queries": ["articles by John Doe about AI", "posts about machine learning"], "top_k": 2}' | jq .
+
+test-all-endpoints: check-env ## Test all API endpoints comprehensively
+	@echo "🚀 Testing ALL API endpoints..."
+	@echo "================================================"
+	@echo ""
+	@echo "📍 1. Testing GET / (Root endpoint)"
+	curl -s http://localhost:8000/ | jq .
+	@echo ""
+	@echo "📍 2. Testing GET /health (Health check)"
+	curl -s http://localhost:8000/health | jq .
+	@echo ""
+	@echo "📍 3. Testing GET /examples (Example queries)"
+	curl -s http://localhost:8000/examples | jq .
+	@echo ""
+	@echo "📍 4. Testing POST /query (Single query conversion)"
+	curl -s -X POST "http://localhost:8000/query" \
+		-H "Content-Type: application/json" \
+		-d '{"query": "Show me articles by Alice Zhang from last year about machine learning"}' | jq .
+	@echo ""
+	@echo "📍 5. Testing POST /batch-query (Batch query conversion)"
+	curl -s -X POST "http://localhost:8000/batch-query" \
+		-H "Content-Type: application/json" \
+		-d '["Find posts tagged with LLMs published in June, 2023", "Anything by John Doe on vector search?"]' | jq .
+	@echo ""
+	@echo "📍 6. Testing POST /results (Vector search with filter - requires Pinecone)"
+	@echo "Note: This endpoint requires Pinecone setup. Will return error if not configured."
+	curl -s -X POST "http://localhost:8000/results" \
+		-H "Content-Type: application/json" \
+		-d '{"query": "articles by John Doe about AI", "top_k": 3}' | jq . || echo "❌ Vector search unavailable (Pinecone not configured)"
+	@echo ""
+	@echo "📍 7. Testing POST /batch-results (Batch vector search - requires Pinecone)"
+	@echo "Note: This endpoint requires Pinecone setup. Will return error if not configured."
+	curl -s -X POST "http://localhost:8000/batch-results" \
+		-H "Content-Type: application/json" \
+		-d '{"queries": ["articles by John Doe about AI", "posts about machine learning"], "top_k": 2}' | jq . || echo "❌ Batch vector search unavailable (Pinecone not configured)"
+	@echo ""
+	@echo "✅ All endpoint tests completed!"
+	@echo "================================================"
+
 sync: ## Sync dependencies with uv
 	uv sync
 
@@ -135,6 +204,7 @@ docker-stop: ## Stop Docker container
 clean: ## Clean generated files
 	@echo "🧹 Cleaning generated files..."
 	rm -f batch_test_results.json
+	rm -f requirements-freeze.txt
 	find . -type d -name "__pycache__" -delete
 	find . -type f -name "*.pyc" -delete
 	find . -type d -name "*.egg-info" -exec rm -rf {} +
