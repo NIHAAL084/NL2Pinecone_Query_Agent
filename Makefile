@@ -1,7 +1,7 @@
 # Makefile for NL2Pinecone Query Agent
 # Uses uv for fast dependency management
 
-.PHONY: help setup install run test test-batch test-primary health clean dev docker-build docker-run docker-stop samples check-env populate-db clear-db test-search test-all-endpoints
+.PHONY: help setup install run test test-batch test-primary health clean dev docker-build docker-run docker-stop docker-logs docker-status samples check-env populate-db clear-db test-search test-all-endpoints
 
 help: ## Show this help message
 	@echo "🤖 NL2Pinecone Query Agent - Available Commands"
@@ -39,6 +39,8 @@ help: ## Show this help message
 	@echo "  docker-build  - Build Docker image"
 	@echo "  docker-run    - Run Docker container"
 	@echo "  docker-stop   - Stop Docker container"
+	@echo "  docker-logs   - Show Docker container logs"
+	@echo "  docker-status - Show Docker container status"
 	@echo ""
 	@echo "Development:"
 	@echo "  clean         - Clean generated files"
@@ -199,6 +201,14 @@ docker-stop: ## Stop Docker container
 	docker stop nl2pinecone-api 2>/dev/null || echo "Container not running"
 	docker rm nl2pinecone-api 2>/dev/null || echo "Container not found"
 	@echo "✅ Container stopped and removed"
+
+docker-logs: ## Show Docker container logs
+	@echo "📋 Docker container logs:"
+	docker logs nl2pinecone-api 2>/dev/null || echo "❌ Container not found or not running"
+
+docker-status: ## Show Docker container status
+	@echo "📊 Docker container status:"
+	docker ps -a --filter name=nl2pinecone-api --format "table {{.Names}}\t{{.Status}}\t{{.Ports}}" 2>/dev/null || echo "❌ Container not found"
 
 # Development utilities
 clean: ## Clean generated files

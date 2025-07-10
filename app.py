@@ -14,6 +14,22 @@ from nl2pinecone_agent import NL2PineconeAgent
 from pinecone import Pinecone
 import json
 
+
+def is_running_in_docker() -> bool:
+    """Check if the application is running inside a Docker container"""
+    return os.path.exists('/.dockerenv')
+
+
+def get_ollama_url() -> str:
+    """Get the appropriate Ollama URL based on the environment"""
+    base_url = os.getenv("OLLAMA_EMBED_URL", "http://localhost:11434/api/embeddings")
+    
+    if is_running_in_docker():
+        # Replace localhost with host.docker.internal for Docker environment
+        base_url = base_url.replace("localhost", "host.docker.internal")
+    
+    return base_url
+
 app = FastAPI(
     title="NL2Pinecone Query Agent",
     description="Convert natural language queries to Pinecone metadata filters",
@@ -26,7 +42,7 @@ agent = NL2PineconeAgent()
 # Initialize Pinecone client
 PINECONE_API_KEY = os.getenv("PINECONE_API_KEY")
 PINECONE_INDEX = os.getenv("PINECONE_INDEX")
-OLLAMA_EMBED_URL = os.getenv("OLLAMA_EMBED_URL", "http://localhost:11434/api/embeddings")
+OLLAMA_EMBED_URL = get_ollama_url()
 
 pinecone_client = None
 pinecone_index = None

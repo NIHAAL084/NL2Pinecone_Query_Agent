@@ -10,6 +10,23 @@ import google.generativeai as genai
 from pinecone import Pinecone
 from dotenv import load_dotenv
 
+
+def is_running_in_docker() -> bool:
+    """Check if the application is running inside a Docker container"""
+    return os.path.exists('/.dockerenv')
+
+
+def get_ollama_url() -> str:
+    """Get the appropriate Ollama URL based on the environment"""
+    base_url = os.getenv("OLLAMA_EMBED_URL", "http://localhost:11434/api/embeddings")
+    
+    if is_running_in_docker():
+        # Replace localhost with host.docker.internal for Docker environment
+        base_url = base_url.replace("localhost", "host.docker.internal")
+    
+    return base_url
+
+
 # Load environment variables
 load_dotenv(override=True)
 GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
@@ -66,7 +83,7 @@ def generate_sample(i: int):
         content = f"Sample article about {', '.join(tag_sample)} by {author}."
     # Use Ollama embedding model to generate a real vector
     import requests
-    ollama_url = os.getenv("OLLAMA_EMBED_URL", "http://localhost:11434/api/embeddings")
+    ollama_url = get_ollama_url()
     emb_response = requests.post(
         ollama_url,
         json={"model": "nomic-embed-text", "prompt": content}
