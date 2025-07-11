@@ -1,26 +1,29 @@
 # Natural Language to Pinecone Query Agent 🤖
 
-A production-ready AI agent that converts natural language queries into structured Pinecone metadata filters using Google Gemini AI, featuring comprehensive batch processing and testing capabilities.
+A production-ready AI agent that converts natural language queries into structured Pinecone metadata filters using Google Gemini AI, featuring comprehensive batch processing, web scraping, and advanced tag normalization.
 
 ## 🎯 Overview
 
-This project implements an intelligent agent that converts natural language input into valid Pinecone queries with vector search and metadata filtering. The agent leverages Google Gemini AI to understand temporal references, author names, and topic tags, creating precise database queries for vector similarity search.
+This project implements an intelligent agent that converts natural language input into valid Pinecone queries with vector search and metadata filtering. The agent leverages **Google Gemini 2.5 Flash Lite** to understand temporal references, author names, topic tags, and complex query patterns, creating precise database queries for vector similarity search.
 
 **Key Features:**
 
-- 🧠 **Google Gemini AI Integration** - Advanced natural language understanding
-- ⚡ **Batch Processing** - Handle multiple queries simultaneously  
+- 🧠 **Google Gemini 2.5 Flash Lite** - Latest AI model with advanced natural language understanding
+- ⚡ **Batch Processing** - Handle multiple queries simultaneously with rate limiting
 - 🔍 **Vector Search** - Semantic search with metadata filtering via Pinecone & Ollama
-- 🧪 **Comprehensive Testing** - 15 test scenarios with 100% success rate
+- 🌐 **Web Scraping** - Intelligent content extraction from URLs using Beautiful Soup
+- 🏷️ **Smart Tag Normalization** - Preserves event years (IPL 2025) while normalizing names
+- 🧪 **Comprehensive Testing** - 30 test scenarios with detailed validation and metrics
 - 🐳 **Docker Support** - Production-ready containerization
 - 📊 **Detailed Metrics** - Performance tracking and validation reports
 - 🔧 **uv Integration** - Fast dependency management
+- 🎯 **Sophisticated Prompt Engineering** - 10 rules and 8 examples for precise query conversion
 
 ## 🏗️ Architecture
 
 ```mermaid
 graph TD
-    A[Natural Language Query] --> B[Google Gemini AI]
+    A[Natural Language Query] --> B[Google Gemini 2.5 Flash Lite]
     B --> C[JSON Extraction & Validation]
     C --> D[Pinecone Filter JSON]
     
@@ -34,66 +37,156 @@ graph TD
     J --> K[Pinecone Vector Search + Metadata Filter]
     K --> L[Search Results with Metadata]
     
-    M[Test Suite] --> N[Comprehensive Validation]
-    N --> O[Success Metrics & Reports]
+    M[CSV Data] --> N[Web Scraping & Content Extraction]
+    N --> O[Tag Normalization & Database Population]
+    
+    P[Test Suite] --> Q[30 Test Scenarios with Validation]
+    Q --> R[Success Metrics & Reports]
 ```
 
 ## 📁 Project Structure
 
 ```
 NL2Pinecone_Query_Agent/
-├── app.py                      # FastAPI application with vector search endpoints
-├── nl2pinecone_agent.py        # Core agent implementation (Gemini-only)
-├── test_samples.py             # Comprehensive test data from requirements
-├── test_batch.py               # Batch testing script with validation
-├── batch_test_results.json     # Generated test results and metrics
-├── populate_pinecone_db.py     # Database population utility with Gemini content
-├── delete_records.py           # Utility to delete records from Pinecone
-├── pyproject.toml              # uv-compatible project configuration
-├── project_req.txt             # Project Requirement
-├── uv.lock                     # UV dependency lock file
-├── Makefile                    # Development and testing automation
-├── Dockerfile                  # Multi-stage container configuration
-├── .env.example                # Environment variable template
-└── README.md                   # This documentation
+├── app.py                          # FastAPI application with 7 endpoints
+├── nl2pinecone_agent.py            # Core agent with Gemini 2.5 Flash Lite
+├── test_batch-results.py           # Comprehensive batch testing with validation
+├── test_batch-queries.py           # Query generation testing script
+├── test_samples-results.json       # 30 test scenarios with expected results
+├── test_samples-queries.json       # Test queries for batch processing
+├── batch_query_test-results.json   # Generated test results and metrics
+├── batch_results_test-results.json # Generated results validation data
+├── populate_pinecone_db.py         # Database population with Gemini content
+├── populate_pinecone_db_with_csv.py # Database population from CSV with web scraping
+├── delete_records.py               # Utility to delete records from Pinecone
+├── sample_data.csv                 # Sample CSV data for database population
+├── pyproject.toml                  # uv-compatible project configuration
+├── project_req.txt                 # Project requirements
+├── uv.lock                         # UV dependency lock file
+├── Makefile                        # Development and testing automation
+├── Dockerfile                      # Multi-stage container configuration
+├── .env.example                    # Environment variable template
+├── .gitignore                      # Git ignore patterns
+├── PROJECT_SUMMARY.md              # Project completion summary
+└── README.md                       # This documentation
+```
+
+## 🔧 Advanced Features
+
+### **Intelligent Tag Normalization**
+
+The system now features sophisticated tag normalization that:
+
+- **Preserves Event Years**: "IPL2025" → "IPL 2025" (with space)
+- **Normalizes Person Names**: "RohitSharma" → "Rohit Sharma"
+- **Handles Special Cases**: "RRvsMI" → ["RR", "MI"]
+- **Separates Compound Terms**: "cricket health issues" → ["cricket", "health", "issues"]
+- **Maintains Abbreviations**: "DRS", "RCB", "BallonDor" stay intact
+
+### **Smart Query Understanding**
+
+The agent distinguishes between:
+- **Publication Dates**: "from 2025" → `published_year: 2025`
+- **Subject Matter**: "about IPL 2025" → `tags: ["IPL 2025"]`
+- **Author vs Topics**: "by John" vs "about John"
+- **Compound Events**: Keeps established terms like "machine learning" intact
+
+### **Web Scraping & Content Extraction**
+
+The CSV population script features:
+- **Beautiful Soup Integration** for robust HTML parsing
+- **Smart Content Selectors** with fallback strategies
+- **Content Cleaning** removes ads, navigation, and artifacts
+- **Metadata Preservation** while truncating embeddings for optimal performance
+- **Batch Processing** with progress tracking
+
+### **Database Population Options**
+
+The project offers two ways to populate your Pinecone database:
+
+#### 1. **Gemini-Generated Content** (Default)
+
+```bash
+make populate-db
+```
+
+- Generates 100 AI-created articles using Gemini
+- Takes ~7 minutes due to API rate limits
+- Creates diverse content across multiple topics and authors
+
+#### 2. **CSV-Based Real Content** (Recommended)
+
+```bash
+make populate-db-csv
+# Or with custom file: make populate-db-csv CSV_FILE=your_data.csv
+```
+
+- Scrapes real content from URLs in CSV file
+- Uses `sample_data.csv` by default (15 cricket articles included)
+- Extracts and cleans web content using Beautiful Soup
+- Advanced tag normalization preserving event years
+- Supports custom CSV files with format: `pageURL,title,publishedDate,author,tags`
+
+**CSV Format Requirements:**
+
+- `pageURL`: URL to scrape content from
+- `title`: Article title (stored in metadata, not used for querying)
+- `publishedDate`: Date in YYYY-MM-DD format
+- `author`: Author name for filtering
+- `tags`: Comma-separated or JSON array format
+
+Example CSV row:
+
+```csv
+https://example.com/article,My Article Title,2024-03-15,John Doe,"AI,machine learning"
 ```
 
 ## 📊 Project Status & Metrics
 
 ### **Current Status: ✅ COMPLETE & PRODUCTION-READY**
 
-- 🎯 **100% Functionality Delivered** - All requirements implemented
-- 🧪 **100% Test Success Rate** - 15/15 test cases passing
+- 🎯 **100% Functionality Delivered** - All requirements implemented and enhanced
+- 🧪 **Comprehensive Testing** - 30 test scenarios with detailed validation
 - 🐳 **Docker Ready** - Production containerization complete
 - 🚀 **API Deployed** - 7 endpoints fully functional
-- 📚 **Documentation Complete** - Comprehensive README and examples
+- 📚 **Documentation Complete** - Comprehensive README and PROJECT_SUMMARY.md
 - 🔧 **Development Tools** - Full Makefile automation
+- 🌐 **Web Scraping Ready** - Beautiful Soup integration for real content
+- 🏷️ **Advanced Tag Processing** - Smart normalization with event year preservation
 
 ### **Performance Metrics:**
 
-- ⚡ **Query Processing**: ~1.1 seconds per natural language query
-- 🧠 **AI Accuracy**: 100% success rate on test samples
-- 🔄 **Batch Processing**: 15 queries in ~16.8 seconds
+- ⚡ **Query Processing**: ~3.1 seconds per natural language query (with Gemini 2.5)
+- 🧠 **AI Accuracy**: Enhanced prompt engineering with 10 rules and 8 examples
+- 🔄 **Batch Processing**: 30 queries in batch mode (~3.1s per query)
+- 🌐 **Web Scraping**: 100% success rate on sample data (15/15 articles)
 - 🐳 **Docker Build Time**: ~89 seconds (with layer caching)
 - 📦 **Container Size**: Optimized multi-stage build
 - 🛡️ **Security**: Non-root container user, health checks
+- 🧪 **Test Coverage**: 30 comprehensive test scenarios with validation
 
 ## ✅ Test Results & Validation
 
 ### **Latest Batch Test Results:**
 
-- 🎯 **100% Success Rate** across all test samples  
-- ⚡ **15 queries processed** in ~16.8 seconds (~1.1s per query)
-- ✅ **All primary test cases** from project requirements passed
-- ✅ **All additional test cases** handled correctly  
-- ✅ **Edge cases and variations** processed accurately
+- 🎯 **Comprehensive Test Coverage** across 30 test scenarios with validation
+- ⚡ **30 queries processed** in batch mode (~3.1s per query average)
+- ✅ **Advanced query patterns** including event years, compound terms, and author detection
+- ✅ **Sophisticated tag normalization** with event year preservation (IPL 2025)
+- ✅ **Author vs topic distinction** accuracy validation
+- ✅ **Date vs subject matter** differentiation testing
+- ✅ **Vector search integration** with Pinecone and Ollama embeddings
 
 ### **Test Coverage:**
 
-- **Primary samples** (project requirements): 3 queries
-- **Additional samples** (README examples): 7 queries
-- **Edge cases** (date variations, complex names): 5 queries
-- **Total coverage**: 15 comprehensive test scenarios
+- **Event Year Queries**: "IPL 2025", "Mumbai Indians" with year preservation
+- **Person Name Normalization**: "RohitSharma" → "Rohit Sharma"
+- **Compound Term Handling**: "celebrity news" → ["celebrity", "news"]
+- **Author Detection**: "by Jane Doe" vs "about Jane Doe"
+- **Date Parsing**: Publication dates vs subject years
+- **Special Cases**: Abbreviations (DRS, RCB), team names, technical terms
+- **Vector Search**: End-to-end search with metadata filtering
+- **Total Coverage**: 30 comprehensive test scenarios with expected results validation
 
 ## 🚀 Quick Start
 
@@ -134,7 +227,7 @@ echo "GEMINI_API_KEY=your_gemini_api_key_here" >> .env
 make run
 
 # In a separate terminal, run tests
-make test-batch          # Comprehensive batch testing
+make test-batch          # Comprehensive batch testing (30 scenarios)
 make test-primary        # Core requirement tests only
 make health             # API health check
 ```
@@ -152,7 +245,10 @@ echo "PINECONE_INDEX=your_index_name" >> .env
 # Visit: https://ollama.ai/download
 ollama pull nomic-embed-text
 
-# Populate database with 100 Gemini-generated samples
+# Populate database with real content from CSV (recommended)
+make populate-db-csv     # Uses sample_data.csv (15 cricket articles)
+
+# Alternative: Populate with Gemini-generated content
 make populate-db         # Takes ~7 minutes due to rate limits
 
 # Test vector search endpoints
@@ -314,14 +410,15 @@ make health            # Check API health status
 
 # Testing
 make test              # Run individual query tests
-make test-batch        # Run comprehensive batch tests (all samples)
-make test-primary      # Run primary requirement tests only
+make test-batch        # Run comprehensive batch tests (30 scenarios)
+make test-primary      # Run primary requirement tests (batch queries)
 make test-search       # Test vector search endpoints
 make test-all-endpoints # Test all API endpoints comprehensively
-make samples           # Show all available test samples
+make samples           # Show test sample information
 
 # Database (requires Pinecone + Ollama setup)
 make populate-db       # Generate 100 samples with Gemini (7 min)
+make populate-db-csv   # Populate from CSV file with web scraping
 make clear-db          # Delete all records from Pinecone
 
 # Docker
@@ -331,16 +428,16 @@ make docker-stop       # Stop and remove container
 make docker-logs       # Show container logs
 make docker-status     # Show container status
 
-# Utilities
-make help              # Show all available commands
-
-# Development
-make clean             # Clean generated files and cache
+# Code Quality
 make lint              # Run code linting with ruff
 make format            # Format code with black
 make format-check      # Check code formatting
 make type-check        # Run type checking with mypy
 make ci                # Run full CI pipeline
+
+# Utilities
+make help              # Show all available commands
+make clean             # Clean generated files and cache
 ```
 
 ## 🐳 Docker Deployment
@@ -443,19 +540,22 @@ This project uses uv for fast dependency management. Key benefits:
 ### ✅ Implemented
 
 - [x] Google Gemini AI integration (no fallbacks)
-- [x] Natural language query processing
+- [x] Natural language query processing with 10 rules and 8 examples
 - [x] FastAPI REST API with comprehensive endpoints
 - [x] Vector search with Pinecone + Ollama embeddings
 - [x] Metadata filtering with semantic search
 - [x] Batch query processing with detailed metrics
 - [x] Docker containerization with multi-stage builds
 - [x] Automatic Docker environment detection for Ollama
-- [x] Comprehensive test suite (15 test scenarios)
+- [x] Comprehensive test suite (30 test scenarios)
 - [x] uv-based dependency management
 - [x] Production-ready logging and error handling
 - [x] Health checks and monitoring
 - [x] Automated validation and reporting
 - [x] Database population utilities with rate limiting
+- [x] Web scraping with Beautiful Soup integration
+- [x] Advanced tag normalization preserving event years
+- [x] CSV-based database population with real content
 
 ### 🔮 Future Enhancements
 
@@ -473,8 +573,8 @@ This project uses uv for fast dependency management. Key benefits:
 
 ```bash
 # Quick validation
-make test-primary      # Test core requirements (3 queries)
-make test-batch        # Full test suite (15 queries)
+make test-primary      # Test core requirements using batch-queries
+make test-batch        # Full test suite using batch-results (30 queries)
 
 # Individual testing
 curl -X POST "http://localhost:8000/query" \
@@ -484,10 +584,11 @@ curl -X POST "http://localhost:8000/query" \
 
 ### Test Results
 
-All tests generate detailed reports in `batch_test_results.json` with:
+All tests generate detailed reports in JSON files with:
 
-- Query processing times
-- Success/failure rates
+- Query processing times and success rates
+- Filter accuracy validation against expected results
+- Vector search result validation
 - Exact vs approximate matches
 - Error details and debugging information
 
@@ -508,6 +609,8 @@ cd NL2Pinecone_Query_Agent
 make dev
 make test-batch  # Ensure all tests pass
 ```
+
+**📋 For a detailed project overview, see [PROJECT_SUMMARY.md](PROJECT_SUMMARY.md)**
 
 ## 📝 License
 

@@ -1,0 +1,908 @@
+{
+    "queries": [
+        {
+            "query": "Show me articles by Jane Doe about IPL 2025",
+            "expected_pinecone_filter": {
+                "author": "Jane Doe",
+                "tags": {
+                    "$in": [
+                        "IPL 2025"
+                    ]
+                }
+            },
+            "expected_matches": [
+                {
+                    "author": "Jane Doe",
+                    "pageURL": "https://www.indiatoday.in/sports/cricket/story/ipl-2025-rr-vs-mi-rohit-sharma-hardik-pandya-ryan-rickelton-jasprit-bumrah-2718272-2025-05-01",
+                    "published_day": 1,
+                    "published_month": 5,
+                    "published_year": 2025,
+                    "tags": [
+                        "IPL",
+                        "Mumbai Indians",
+                        "Rajasthan Royals"
+                    ]
+                },
+                {
+                    "author": "Jane Doe",
+                    "pageURL": "https://www.indiatoday.in/sports/cricket/story/ipl-2025-rr-vs-mi-vaibhav-suryavanshi-duck-hundred-14-year-old-disappointment-2718247-2025-05-01",
+                    "published_day": 1,
+                    "published_month": 5,
+                    "published_year": 2025,
+                    "tags": [
+                        "Vaibhav Suryavanshi",
+                        "IPL",
+                        "cricket",
+                        "form"
+                    ]
+                },
+                {
+                    "author": "Jane Doe",
+                    "pageURL": "https://www.indiatoday.in/sports/cricket/story/ipl-2025-sunil-gavaskar-on-vaibhav-suryavanshi-14-year-old-sensation-2718210-2025-05-01",
+                    "published_day": 1,
+                    "published_month": 5,
+                    "published_year": 2025,
+                    "tags": [
+                        "Vaibhav Suryavanshi",
+                        "Sunil Gavaskar",
+                        "IPL"
+                    ]
+                }
+            ]
+        },
+        {
+            "query": "Find posts by Mary Poppins about Rohit Sharma",
+            "expected_pinecone_filter": {
+                "author": "Mary Poppins",
+                "tags": {
+                    "$in": [
+                        "Rohit Sharma"
+                    ]
+                }
+            },
+            "expected_matches": [
+                {
+                    "author": "Mary Poppins",
+                    "pageURL": "https://www.indiatoday.in/sports/cricket/story/rr-vs-mi-rohit-sharma-laughs-as-last-second-drs-call-helps-him-survive-2718196-2025-05-01",
+                    "published_day": 1,
+                    "published_month": 5,
+                    "published_year": 2025,
+                    "tags": [
+                        "Rohit Sharma",
+                        "DRS",
+                        "RR",
+                        "MI"
+                    ]
+                }
+            ]
+        },
+        {
+            "query": "Articles by Harry Potter about Mumbai Indians",
+            "expected_pinecone_filter": {
+                "author": "Harry Potter",
+                "tags": {
+                    "$in": [
+                        "Mumbai Indians"
+                    ]
+                }
+            },
+            "expected_matches": [
+                {
+                    "author": "Harry Potter",
+                    "pageURL": "https://www.indiatoday.in/sports/cricket/story/suryakumar-yadav-mumbai-indians-debut-ipl-2025-2718029-2025-05-01",
+                    "published_day": 1,
+                    "published_month": 5,
+                    "published_year": 2025,
+                    "tags": [
+                        "Suryakumar Yadav",
+                        "Mumbai Indians",
+                        "IPL"
+                    ]
+                }
+            ]
+        },
+        {
+            "query": "Show me posts about Rajasthan Royals from May 2025",
+            "expected_pinecone_filter": {
+                "tags": {
+                    "$in": [
+                        "Rajasthan Royals"
+                    ]
+                },
+                "published_year": {
+                    "$eq": 2025
+                },
+                "published_month": {
+                    "$eq": 5
+                }
+            },
+            "expected_matches": [
+                {
+                    "author": "Jane Doe",
+                    "pageURL": "https://www.indiatoday.in/sports/cricket/story/ipl-2025-rr-vs-mi-rohit-sharma-hardik-pandya-ryan-rickelton-jasprit-bumrah-2718272-2025-05-01",
+                    "published_day": 1,
+                    "published_month": 5,
+                    "published_year": 2025,
+                    "tags": [
+                        "IPL",
+                        "Mumbai Indians",
+                        "Rajasthan Royals"
+                    ]
+                },
+                {
+                    "author": "Mary Poppins",
+                    "pageURL": "https://www.indiatoday.in/sports/cricket/story/ipl-2025-gareth-southgate-attends-ipl-jaipur-rajasthan-royals-womens-initiatives-2718207-2025-05-01",
+                    "published_day": 1,
+                    "published_month": 5,
+                    "published_year": 2025,
+                    "tags": [
+                        "Gareth Southgate",
+                        "Rajasthan Royals",
+                        "IPL"
+                    ]
+                },
+                {
+                    "author": "Mary Poppins",
+                    "pageURL": "https://www.indiatoday.in/sports/cricket/story/ipl-2025-rr-vs-mi-sandeep-sharma-broken-finger-injury-akash-madhwal-2718183-2025-05-01",
+                    "published_day": 1,
+                    "published_month": 5,
+                    "published_year": 2025,
+                    "tags": [
+                        "Sandeep Sharma",
+                        "Rajasthan Royals",
+                        "IPL",
+                        "injuries"
+                    ]
+                }
+            ]
+        },
+        {
+            "query": "Find articles about Vaibhav Suryavanshi",
+            "expected_pinecone_filter": {
+                "tags": {
+                    "$in": [
+                        "Vaibhav Suryavanshi"
+                    ]
+                }
+            },
+            "expected_matches": [
+                {
+                    "author": "Jane Doe",
+                    "pageURL": "https://www.indiatoday.in/sports/cricket/story/ipl-2025-rr-vs-mi-vaibhav-suryavanshi-duck-hundred-14-year-old-disappointment-2718247-2025-05-01",
+                    "published_day": 1,
+                    "published_month": 5,
+                    "published_year": 2025,
+                    "tags": [
+                        "Vaibhav Suryavanshi",
+                        "IPL",
+                        "cricket",
+                        "form"
+                    ]
+                },
+                {
+                    "author": "Jane Doe",
+                    "pageURL": "https://www.indiatoday.in/sports/cricket/story/ipl-2025-sunil-gavaskar-on-vaibhav-suryavanshi-14-year-old-sensation-2718210-2025-05-01",
+                    "published_day": 1,
+                    "published_month": 5,
+                    "published_year": 2025,
+                    "tags": [
+                        "Vaibhav Suryavanshi",
+                        "Sunil Gavaskar",
+                        "IPL"
+                    ]
+                }
+            ]
+        },
+        {
+            "query": "Posts about IPL injuries",
+            "expected_pinecone_filter": {
+                "tags": {
+                    "$in": [
+                        "IPL",
+                        "injuries"
+                    ]
+                }
+            },
+            "expected_matches": [
+                {
+                    "author": "Jane Doe",
+                    "pageURL": "https://www.indiatoday.in/sports/cricket/story/ipl-2025-shubman-gill-back-spasm-gt-vs-srh-2718263-2025-05-01",
+                    "published_day": 1,
+                    "published_month": 5,
+                    "published_year": 2025,
+                    "tags": [
+                        "Shubman Gill",
+                        "Gujarat Titans",
+                        "IPL",
+                        "injuries"
+                    ]
+                },
+                {
+                    "author": "Mary Poppins",
+                    "pageURL": "https://www.indiatoday.in/sports/cricket/story/ipl-2025-rr-vs-mi-sandeep-sharma-broken-finger-injury-akash-madhwal-2718183-2025-05-01",
+                    "published_day": 1,
+                    "published_month": 5,
+                    "published_year": 2025,
+                    "tags": [
+                        "Sandeep Sharma",
+                        "Rajasthan Royals",
+                        "IPL",
+                        "injuries"
+                    ]
+                }
+            ]
+        },
+        {
+            "query": "Articles by Akainu about RCB",
+            "expected_pinecone_filter": {
+                "author": "Akainu",
+                "tags": {
+                    "$in": [
+                        "RCB"
+                    ]
+                }
+            },
+            "expected_matches": [
+                {
+                    "author": "Akainu",
+                    "pageURL": "https://www.indiatoday.in/sports/cricket/story/suyash-sharma-rcb-ipl-2025-hernia-injection-2717992-2025-05-01",
+                    "published_day": 1,
+                    "published_month": 5,
+                    "published_year": 2025,
+                    "tags": [
+                        "Suyash Sharma",
+                        "RCB",
+                        "cricket",
+                        "health"
+                    ]
+                }
+            ]
+        },
+        {
+            "query": "Show me football articles by Harry Potter",
+            "expected_pinecone_filter": {
+                "author": "Harry Potter",
+                "tags": {
+                    "$in": [
+                        "football"
+                    ]
+                }
+            },
+            "expected_matches": [
+                {
+                    "author": "Harry Potter",
+                    "pageURL": "https://www.indiatoday.in/sports/football/story/barcelona-champions-league-lamine-yamal-2718130-2025-05-01",
+                    "published_day": 1,
+                    "published_month": 5,
+                    "published_year": 2025,
+                    "tags": [
+                        "Lamine Yamal",
+                        "BallonDor",
+                        "Barcelona"
+                    ]
+                }
+            ]
+        },
+        {
+            "query": "Find posts about Shikhar Dhawan",
+            "expected_pinecone_filter": {
+                "tags": {
+                    "$in": [
+                        "Shikhar Dhawan"
+                    ]
+                }
+            },
+            "expected_matches": [
+                {
+                    "author": "Mary Poppins",
+                    "pageURL": "https://www.indiatoday.in/sports/cricket/story/shikhar-dhawan-girlfriend-sophie-shine-instagram-post-confirmation-2718181-2025-05-01",
+                    "published_day": 1,
+                    "published_month": 5,
+                    "published_year": 2025,
+                    "tags": [
+                        "Shikhar Dhawan",
+                        "Sophie Shine",
+                        "celebrity",
+                        "news"
+                    ]
+                }
+            ]
+        },
+        {
+            "query": "Articles about Gareth Southgate",
+            "expected_pinecone_filter": {
+                "tags": {
+                    "$in": [
+                        "Gareth Southgate"
+                    ]
+                }
+            },
+            "expected_matches": [
+                {
+                    "author": "Mary Poppins",
+                    "pageURL": "https://www.indiatoday.in/sports/cricket/story/ipl-2025-gareth-southgate-attends-ipl-jaipur-rajasthan-royals-womens-initiatives-2718207-2025-05-01",
+                    "published_day": 1,
+                    "published_month": 5,
+                    "published_year": 2025,
+                    "tags": [
+                        "Gareth Southgate",
+                        "Rajasthan Royals",
+                        "IPL"
+                    ]
+                }
+            ]
+        },
+        {
+            "query": "Show me posts about Virat Kohli",
+            "expected_pinecone_filter": {
+                "tags": {
+                    "$in": [
+                        "Virat Kohli"
+                    ]
+                }
+            },
+            "expected_matches": [
+                {
+                    "author": "Jane Doe",
+                    "pageURL": "https://www.indiatoday.in/sports/cricket/story/ipl-2025-rr-vs-mi-rohit-sharma-6000-runs-mumbai-indians-virat-kohli-2718232-2025-05-01",
+                    "published_day": 1,
+                    "published_month": 5,
+                    "published_year": 2025,
+                    "tags": [
+                        "Rohit Sharma",
+                        "Mumbai Indians",
+                        "IPL",
+                        "records"
+                    ]
+                },
+                {
+                    "author": "Harry Potter",
+                    "pageURL": "https://www.indiatoday.in/sports/cricket/story/virender-sehwag-reveals-why-delhi-daredevils-didnt-pick-virat-kohli-in-ipl-2008-2718104-2025-05-01",
+                    "published_day": 1,
+                    "published_month": 5,
+                    "published_year": 2025,
+                    "tags": [
+                        "Virender Sehwag",
+                        "Virat Kohli",
+                        "IPL",
+                        "history"
+                    ]
+                }
+            ]
+        },
+        {
+            "query": "Find articles about Shubman Gill",
+            "expected_pinecone_filter": {
+                "tags": {
+                    "$in": [
+                        "Shubman Gill"
+                    ]
+                }
+            },
+            "expected_matches": [
+                {
+                    "author": "Jane Doe",
+                    "pageURL": "https://www.indiatoday.in/sports/cricket/story/ipl-2025-shubman-gill-back-spasm-gt-vs-srh-2718263-2025-05-01",
+                    "published_day": 1,
+                    "published_month": 5,
+                    "published_year": 2025,
+                    "tags": [
+                        "Shubman Gill",
+                        "Gujarat Titans",
+                        "IPL",
+                        "injuries"
+                    ]
+                }
+            ]
+        },
+        {
+            "query": "Posts about Gujarat Titans",
+            "expected_pinecone_filter": {
+                "tags": {
+                    "$in": [
+                        "Gujarat Titans"
+                    ]
+                }
+            },
+            "expected_matches": [
+                {
+                    "author": "Jane Doe",
+                    "pageURL": "https://www.indiatoday.in/sports/cricket/story/ipl-2025-shubman-gill-back-spasm-gt-vs-srh-2718263-2025-05-01",
+                    "published_day": 1,
+                    "published_month": 5,
+                    "published_year": 2025,
+                    "tags": [
+                        "Shubman Gill",
+                        "Gujarat Titans",
+                        "IPL",
+                        "injuries"
+                    ]
+                }
+            ]
+        },
+        {
+            "query": "Show me IPL records articles",
+            "expected_pinecone_filter": {
+                "tags": {
+                    "$in": [
+                        "IPL",
+                        "records"
+                    ]
+                }
+            },
+            "expected_matches": [
+                {
+                    "author": "Jane Doe",
+                    "pageURL": "https://www.indiatoday.in/sports/cricket/story/ipl-2025-rr-vs-mi-rohit-sharma-6000-runs-mumbai-indians-virat-kohli-2718232-2025-05-01",
+                    "published_day": 1,
+                    "published_month": 5,
+                    "published_year": 2025,
+                    "tags": [
+                        "Rohit Sharma",
+                        "Mumbai Indians",
+                        "IPL",
+                        "records"
+                    ]
+                }
+            ]
+        },
+        {
+            "query": "Articles about DRS in cricket",
+            "expected_pinecone_filter": {
+                "tags": {
+                    "$in": [
+                        "DRS",
+                        "cricket"
+                    ]
+                }
+            },
+            "expected_matches": [
+                {
+                    "author": "Mary Poppins",
+                    "pageURL": "https://www.indiatoday.in/sports/cricket/story/rr-vs-mi-rohit-sharma-laughs-as-last-second-drs-call-helps-him-survive-2718196-2025-05-01",
+                    "published_day": 1,
+                    "published_month": 5,
+                    "published_year": 2025,
+                    "tags": [
+                        "Rohit Sharma",
+                        "DRS",
+                        "RR",
+                        "MI"
+                    ]
+                }
+            ]
+        },
+        {
+            "query": "Find posts about cricket health issues",
+            "expected_pinecone_filter": {
+                "tags": {
+                    "$in": [
+                        "cricket",
+                        "health",
+                        "issues"
+                    ]
+                }
+            },
+            "expected_matches": [
+                {
+                    "author": "Akainu",
+                    "pageURL": "https://www.indiatoday.in/sports/cricket/story/suyash-sharma-rcb-ipl-2025-hernia-injection-2717992-2025-05-01",
+                    "published_day": 1,
+                    "published_month": 5,
+                    "published_year": 2025,
+                    "tags": [
+                        "Suyash Sharma",
+                        "RCB",
+                        "cricket",
+                        "health"
+                    ]
+                }
+            ]
+        },
+        {
+            "query": "Show me posts about Suryakumar Yadav",
+            "expected_pinecone_filter": {
+                "tags": {
+                    "$in": [
+                        "Suryakumar Yadav"
+                    ]
+                }
+            },
+            "expected_matches": [
+                {
+                    "author": "Harry Potter",
+                    "pageURL": "https://www.indiatoday.in/sports/cricket/story/suryakumar-yadav-mumbai-indians-debut-ipl-2025-2718029-2025-05-01",
+                    "published_day": 1,
+                    "published_month": 5,
+                    "published_year": 2025,
+                    "tags": [
+                        "Suryakumar Yadav",
+                        "Mumbai Indians",
+                        "IPL"
+                    ]
+                }
+            ]
+        },
+        {
+            "query": "Articles about Pickleball",
+            "expected_pinecone_filter": {
+                "tags": {
+                    "$in": [
+                        "Pickleball"
+                    ]
+                }
+            },
+            "expected_matches": [
+                {
+                    "author": "Harry Potter",
+                    "pageURL": "https://www.indiatoday.in/sports/other-sports/story/pickleball-administrative-war-aipa-vs-ipa-india-sports-ministry-2717984-2025-05-01",
+                    "published_day": 1,
+                    "published_month": 5,
+                    "published_year": 2025,
+                    "tags": [
+                        "Pickleball",
+                        "sports",
+                        "politics",
+                        "India",
+                        "sports"
+                    ]
+                }
+            ]
+        },
+        {
+            "query": "Find posts about Bangladesh cricket",
+            "expected_pinecone_filter": {
+                "tags": {
+                    "$in": [
+                        "Bangladesh",
+                        "cricket"
+                    ]
+                }
+            },
+            "expected_matches": [
+                {
+                    "author": "Harry Potter",
+                    "pageURL": "https://www.indiatoday.in/sports/cricket/story/najmul-hossain-shanto-bangladesh-vs-zimbabwe-press-conference-chattogram-2718047-2025-05-01",
+                    "published_day": 1,
+                    "published_month": 5,
+                    "published_year": 2025,
+                    "tags": [
+                        "Najmul Shanto",
+                        "Bangladesh",
+                        "cricket",
+                        "Chattogram"
+                    ]
+                }
+            ]
+        },
+        {
+            "query": "Show me articles about celebrity news",
+            "expected_pinecone_filter": {
+                "tags": {
+                    "$in": [
+                        "celebrity",
+                        "news"
+                    ]
+                }
+            },
+            "expected_matches": [
+                {
+                    "author": "Mary Poppins",
+                    "pageURL": "https://www.indiatoday.in/sports/cricket/story/shikhar-dhawan-girlfriend-sophie-shine-instagram-post-confirmation-2718181-2025-05-01",
+                    "published_day": 1,
+                    "published_month": 5,
+                    "published_year": 2025,
+                    "tags": [
+                        "Shikhar Dhawan",
+                        "Sophie Shine",
+                        "celebrity",
+                        "news"
+                    ]
+                }
+            ]
+        },
+        {
+            "query": "Posts about IPL history",
+            "expected_pinecone_filter": {
+                "tags": {
+                    "$in": [
+                        "IPL",
+                        "history"
+                    ]
+                }
+            },
+            "expected_matches": [
+                {
+                    "author": "Harry Potter",
+                    "pageURL": "https://www.indiatoday.in/sports/cricket/story/virender-sehwag-reveals-why-delhi-daredevils-didnt-pick-virat-kohli-in-ipl-2008-2718104-2025-05-01",
+                    "published_day": 1,
+                    "published_month": 5,
+                    "published_year": 2025,
+                    "tags": [
+                        "Virender Sehwag",
+                        "Virat Kohli",
+                        "IPL",
+                        "history"
+                    ]
+                }
+            ]
+        },
+        {
+            "query": "Find articles about Virender Sehwag",
+            "expected_pinecone_filter": {
+                "tags": {
+                    "$in": [
+                        "Virender Sehwag"
+                    ]
+                }
+            },
+            "expected_matches": [
+                {
+                    "author": "Harry Potter",
+                    "pageURL": "https://www.indiatoday.in/sports/cricket/story/virender-sehwag-reveals-why-delhi-daredevils-didnt-pick-virat-kohli-in-ipl-2008-2718104-2025-05-01",
+                    "published_day": 1,
+                    "published_month": 5,
+                    "published_year": 2025,
+                    "tags": [
+                        "Virender Sehwag",
+                        "Virat Kohli",
+                        "IPL",
+                        "history"
+                    ]
+                }
+            ]
+        },
+        {
+            "query": "Show me posts about Lamine Yamal",
+            "expected_pinecone_filter": {
+                "tags": {
+                    "$in": [
+                        "Lamine Yamal"
+                    ]
+                }
+            },
+            "expected_matches": [
+                {
+                    "author": "Harry Potter",
+                    "pageURL": "https://www.indiatoday.in/sports/football/story/barcelona-champions-league-lamine-yamal-2718130-2025-05-01",
+                    "published_day": 1,
+                    "published_month": 5,
+                    "published_year": 2025,
+                    "tags": [
+                        "Lamine Yamal",
+                        "BallonDor",
+                        "Barcelona"
+                    ]
+                }
+            ]
+        },
+        {
+            "query": "Articles about Sandeep Sharma",
+            "expected_pinecone_filter": {
+                "tags": {
+                    "$in": [
+                        "Sandeep Sharma"
+                    ]
+                }
+            },
+            "expected_matches": [
+                {
+                    "author": "Mary Poppins",
+                    "pageURL": "https://www.indiatoday.in/sports/cricket/story/ipl-2025-rr-vs-mi-sandeep-sharma-broken-finger-injury-akash-madhwal-2718183-2025-05-01",
+                    "published_day": 1,
+                    "published_month": 5,
+                    "published_year": 2025,
+                    "tags": [
+                        "Sandeep Sharma",
+                        "Rajasthan Royals",
+                        "IPL",
+                        "injuries"
+                    ]
+                }
+            ]
+        },
+        {
+            "query": "Find posts about Suyash Sharma",
+            "expected_pinecone_filter": {
+                "tags": {
+                    "$in": [
+                        "Suyash Sharma"
+                    ]
+                }
+            },
+            "expected_matches": [
+                {
+                    "author": "Akainu",
+                    "pageURL": "https://www.indiatoday.in/sports/cricket/story/suyash-sharma-rcb-ipl-2025-hernia-injection-2717992-2025-05-01",
+                    "published_day": 1,
+                    "published_month": 5,
+                    "published_year": 2025,
+                    "tags": [
+                        "Suyash Sharma",
+                        "RCB",
+                        "cricket",
+                        "health"
+                    ]
+                }
+            ]
+        },
+        {
+            "query": "Show me articles from May 1st, 2025",
+            "expected_pinecone_filter": {
+                "published_year": {
+                    "$eq": 2025
+                },
+                "published_month": {
+                    "$eq": 5
+                },
+                "published_day": {
+                    "$eq": 1
+                }
+            },
+            "expected_matches": [
+                {
+                    "author": "Jane Doe",
+                    "pageURL": "https://www.indiatoday.in/sports/cricket/story/ipl-2025-rr-vs-mi-rohit-sharma-hardik-pandya-ryan-rickelton-jasprit-bumrah-2718272-2025-05-01",
+                    "published_day": 1,
+                    "published_month": 5,
+                    "published_year": 2025,
+                    "tags": [
+                        "IPL",
+                        "Mumbai Indians",
+                        "Rajasthan Royals"
+                    ]
+                },
+                {
+                    "author": "Jane Doe",
+                    "pageURL": "https://www.indiatoday.in/sports/cricket/story/ipl-2025-shubman-gill-back-spasm-gt-vs-srh-2718263-2025-05-01",
+                    "published_day": 1,
+                    "published_month": 5,
+                    "published_year": 2025,
+                    "tags": [
+                        "Shubman Gill",
+                        "Gujarat Titans",
+                        "IPL",
+                        "injuries"
+                    ]
+                },
+                {
+                    "author": "Jane Doe",
+                    "pageURL": "https://www.indiatoday.in/sports/cricket/story/ipl-2025-rr-vs-mi-vaibhav-suryavanshi-duck-hundred-14-year-old-disappointment-2718247-2025-05-01",
+                    "published_day": 1,
+                    "published_month": 5,
+                    "published_year": 2025,
+                    "tags": [
+                        "Vaibhav Suryavanshi",
+                        "IPL",
+                        "cricket",
+                        "form"
+                    ]
+                }
+            ]
+        },
+        {
+            "query": "Posts about sports politics",
+            "expected_pinecone_filter": {
+                "tags": {
+                    "$in": [
+                        "sports",
+                        "politics"
+                    ]
+                }
+            },
+            "expected_matches": [
+                {
+                    "author": "Harry Potter",
+                    "pageURL": "https://www.indiatoday.in/sports/other-sports/story/pickleball-administrative-war-aipa-vs-ipa-india-sports-ministry-2717984-2025-05-01",
+                    "published_day": 1,
+                    "published_month": 5,
+                    "published_year": 2025,
+                    "tags": [
+                        "Pickleball",
+                        "sports",
+                        "politics",
+                        "India",
+                        "sports"
+                    ]
+                }
+            ]
+        },
+        {
+            "query": "Find articles about cricket form",
+            "expected_pinecone_filter": {
+                "tags": {
+                    "$in": [
+                        "cricket",
+                        "form"
+                    ]
+                }
+            },
+            "expected_matches": [
+                {
+                    "author": "Jane Doe",
+                    "pageURL": "https://www.indiatoday.in/sports/cricket/story/ipl-2025-rr-vs-mi-vaibhav-suryavanshi-duck-hundred-14-year-old-disappointment-2718247-2025-05-01",
+                    "published_day": 1,
+                    "published_month": 5,
+                    "published_year": 2025,
+                    "tags": [
+                        "Vaibhav Suryavanshi",
+                        "IPL",
+                        "cricket",
+                        "form"
+                    ]
+                }
+            ]
+        },
+        {
+            "query": "Show me all posts by Jane Doe",
+            "expected_pinecone_filter": {
+                "author": "Jane Doe"
+            },
+            "expected_matches": [
+                {
+                    "author": "Jane Doe",
+                    "pageURL": "https://www.indiatoday.in/sports/cricket/story/ipl-2025-rr-vs-mi-rohit-sharma-hardik-pandya-ryan-rickelton-jasprit-bumrah-2718272-2025-05-01",
+                    "published_day": 1,
+                    "published_month": 5,
+                    "published_year": 2025,
+                    "tags": [
+                        "IPL",
+                        "Mumbai Indians",
+                        "Rajasthan Royals"
+                    ]
+                },
+                {
+                    "author": "Jane Doe",
+                    "pageURL": "https://www.indiatoday.in/sports/cricket/story/ipl-2025-shubman-gill-back-spasm-gt-vs-srh-2718263-2025-05-01",
+                    "published_day": 1,
+                    "published_month": 5,
+                    "published_year": 2025,
+                    "tags": [
+                        "Shubman Gill",
+                        "Gujarat Titans",
+                        "IPL",
+                        "injuries"
+                    ]
+                },
+                {
+                    "author": "Jane Doe",
+                    "pageURL": "https://www.indiatoday.in/sports/cricket/story/ipl-2025-rr-vs-mi-vaibhav-suryavanshi-duck-hundred-14-year-old-disappointment-2718247-2025-05-01",
+                    "published_day": 1,
+                    "published_month": 5,
+                    "published_year": 2025,
+                    "tags": [
+                        "Vaibhav Suryavanshi",
+                        "IPL",
+                        "cricket",
+                        "form"
+                    ]
+                }
+            ]
+        },
+        {
+            "query": "Find articles about Hardik Pandya from Mumbai Indians",
+            "expected_pinecone_filter": {
+                "tags": {
+                    "$in": [
+                        "Hardik Pandya",
+                        "Mumbai Indians"
+                    ]
+                }
+            },
+            "expected_matches": [
+                {
+                    "author": "Jane Doe",
+                    "pageURL": "https://www.indiatoday.in/sports/cricket/story/ipl-2025-rr-vs-mi-rohit-sharma-hardik-pandya-ryan-rickelton-jasprit-bumrah-2718272-2025-05-01",
+                    "published_day": 1,
+                    "published_month": 5,
+                    "published_year": 2025,
+                    "tags": [
+                        "IPL",
+                        "Mumbai Indians",
+                        "Rajasthan Royals"
+                    ]
+                }
+            ]
+        }
+    ]
+}

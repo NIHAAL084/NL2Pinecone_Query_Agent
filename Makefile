@@ -1,7 +1,7 @@
 # Makefile for NL2Pinecone Query Agent
 # Uses uv for fast dependency management
 
-.PHONY: help setup install run test test-batch test-primary health clean dev docker-build docker-run docker-stop docker-logs docker-status samples check-env populate-db clear-db test-search test-all-endpoints
+.PHONY: help setup install run test test-batch test-primary health clean dev docker-build docker-run docker-stop docker-logs docker-status samples check-env populate-db populate-db-csv clear-db test-search test-all-endpoints
 
 help: ## Show this help message
 	@echo "🤖 NL2Pinecone Query Agent - Available Commands"
@@ -18,14 +18,15 @@ help: ## Show this help message
 	@echo ""
 	@echo "Testing:"
 	@echo "  test          - Run individual query tests"
-	@echo "  test-batch    - Run comprehensive batch tests (all samples)"
-	@echo "  test-primary  - Run primary requirement tests only"
+	@echo "  test-batch    - Run comprehensive batch tests (30 scenarios)"
+	@echo "  test-primary  - Run primary requirement tests (batch queries)"
 	@echo "  test-search   - Test vector search endpoints"
 	@echo "  test-all-endpoints - Test all API endpoints comprehensively"
-	@echo "  samples       - Show all test samples"
+	@echo "  samples       - Show test sample information"
 	@echo ""
 	@echo "Database:"
 	@echo "  populate-db   - Generate and upload 100 samples to Pinecone"
+	@echo "  populate-db-csv - Populate Pinecone database from CSV file"
 	@echo "  clear-db      - Delete all records from Pinecone database"
 	@echo ""
 	@echo "Code Quality:"
@@ -94,22 +95,30 @@ test: check-env ## Run individual query tests
 test-batch: check-env ## Run comprehensive batch tests (all samples)
 	@echo "🧪 Running comprehensive batch tests..."
 	@echo "📊 Testing all samples from requirements and documentation"
-	uv run python test_batch.py
+	uv run python test_batch-results.py
 
 test-primary: check-env ## Run primary requirement tests only
 	@echo "🎯 Running primary requirement tests..."
 	@echo "📋 Testing core samples from project requirements"
-	uv run python test_batch.py --primary
+	uv run python test_batch-queries.py
 
 samples: ## Show all test samples
 	@echo "📋 Available test samples:"
-	uv run python test_samples.py
+	@echo "💡 Test samples are defined in test_samples-results.json"
+	@echo "📊 Current test count:"
+	@grep -c '"query":' test_samples-results.json || echo "Test samples file not found"
 
 # Database operations
 populate-db: check-env ## Generate and upload 100 samples to Pinecone
 	@echo "🗄️  Populating Pinecone database with 100 Gemini-generated samples..."
 	@echo "⏰ This will take ~7 minutes due to Gemini rate limits (15 requests/minute)"
 	uv run python populate_pinecone_db.py
+
+populate-db-csv: check-env ## Populate Pinecone database from CSV file
+	@echo "📊 Populating Pinecone database from CSV file..."
+	@echo "🌐 This will scrape content from URLs and may take several minutes"
+	@echo "📁 Using sample_data.csv by default (or specify: make populate-db-csv CSV_FILE=your_file.csv)"
+	uv run python populate_pinecone_db_with_csv.py $(CSV_FILE)
 
 clear-db: check-env ## Delete all records from Pinecone database
 	@echo "🗑️  Clearing all records from Pinecone database..."
@@ -214,6 +223,8 @@ docker-status: ## Show Docker container status
 clean: ## Clean generated files
 	@echo "🧹 Cleaning generated files..."
 	rm -f batch_test_results.json
+	rm -f batch_query_test-results.json 
+	rm -f batch_results_test-results.json
 	rm -f requirements-freeze.txt
 	find . -type d -name "__pycache__" -delete
 	find . -type f -name "*.pyc" -delete

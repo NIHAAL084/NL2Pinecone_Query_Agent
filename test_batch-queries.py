@@ -1,20 +1,52 @@
 """
 Test script for NL2Pinecone Query Agent using batch processing endpoint
 
-This script loads test samples and processes them through the /batch-query endpoint,
-then compares results with expected filters where available.
+This script loads test samples from test_samples-queries.json and processes them 
+through the /batch-query endpoint, then compares results with expected filters.
 """
 
 import requests
 import json
 import time
 from typing import Dict, List, Any
-from test_samples import ALL_SAMPLES, ALL_QUERIES, PRIMARY_SAMPLES
 
 # Configuration
 API_BASE_URL = "http://localhost:8000"
 BATCH_QUERY_ENDPOINT = f"{API_BASE_URL}/batch-query"
 HEALTH_ENDPOINT = f"{API_BASE_URL}/health"
+TEST_SAMPLES_FILE = "test_samples-queries.json"
+
+
+def load_test_samples() -> Dict[str, Any]:
+    """Load test samples from JSON file."""
+    try:
+        with open(TEST_SAMPLES_FILE, "r") as f:
+            return json.load(f)
+    except FileNotFoundError:
+        print(f"❌ Test samples file not found: {TEST_SAMPLES_FILE}")
+        return {}
+    except json.JSONDecodeError as e:
+        print(f"❌ Error parsing test samples file: {e}")
+        return {}
+
+
+def get_all_samples(test_data: Dict[str, Any]) -> List[Dict[str, Any]]:
+    """Get all samples from test data."""
+    all_samples = []
+    for category in ["primary_samples", "additional_samples", "edge_case_samples"]:
+        all_samples.extend(test_data.get(category, []))
+    return all_samples
+
+
+def get_all_queries(test_data: Dict[str, Any]) -> List[str]:
+    """Get all queries from test data."""
+    all_samples = get_all_samples(test_data)
+    return [sample["query"] for sample in all_samples]
+
+
+def get_primary_samples(test_data: Dict[str, Any]) -> List[Dict[str, Any]]:
+    """Get primary samples from test data."""
+    return test_data.get("primary_samples", [])
 
 
 def check_api_health() -> bool:
@@ -48,22 +80,22 @@ def compare_filters(expected: Dict[str, Any], actual: Dict[str, Any]) -> Dict[st
     comparison = {
         "exact_match": expected == actual,
         "missing_fields": [],
-        "extra_fields": [],
-        "field_mismatches": []
+        "field_mismatches": [],
+        "extra_fields": []
     }
     
-    # Check for missing fields
-    for key in expected:
+    # Check for missing fields in actual
+    for key, value in expected.items():
         if key not in actual:
             comparison["missing_fields"].append(key)
-        elif expected[key] != actual[key]:
+        elif actual[key] != value:
             comparison["field_mismatches"].append({
                 "field": key,
-                "expected": expected[key],
+                "expected": value,
                 "actual": actual[key]
             })
     
-    # Check for extra fields
+    # Check for extra fields in actual
     for key in actual:
         if key not in expected:
             comparison["extra_fields"].append(key)
@@ -72,23 +104,33 @@ def compare_filters(expected: Dict[str, Any], actual: Dict[str, Any]) -> Dict[st
 
 
 def run_batch_test():
-    """Run comprehensive batch test."""
-    print("🚀 Starting NL2Pinecone Agent Batch Test")
+    """Run batch test on all samples."""
+    print("🧪 NL2Pinecone Query Agent - Batch Test")
     print("=" * 50)
     
-    # Check API health
-    print("1. Checking API health...")
-    if not check_api_health():
-        print("❌ API is not healthy. Please start the FastAPI server first:")
-        print("   uv run app.py")
+    # Load test samples
+    print("1. Loading test samples...")
+    test_data = load_test_samples()
+    if not test_data:
+        print("❌ Failed to load test samples. Exiting.")
         return
-    print("✅ API is healthy")
     
-    # Process all queries in batch
-    print(f"\n2. Processing {len(ALL_QUERIES)} queries in batch...")
+    all_samples = get_all_samples(test_data)
+    all_queries = get_all_queries(test_data)
+    
+    print(f"   📊 Loaded {len(all_samples)} test samples")
+    print(f"   📋 Primary: {len(test_data.get('primary_samples', []))}")
+    print(f"   📋 Additional: {len(test_data.get('additional_samples', []))}")
+    print(f"   📋 Edge cases: {len(test_data.get('edge_case_samples', []))}")
+    
+    if not check_api_health():
+        print("❌ API is not healthy. Please start the FastAPI server first.")
+        return
+    
+    print(f"\n2. Processing {len(all_queries)} queries in batch...")
     start_time = time.time()
     
-    batch_result = process_batch_queries(ALL_QUERIES)
+    batch_result = process_batch_queries(all_queries)
     
     if "error" in batch_result:
         print(f"❌ Batch processing failed: {batch_result['error']}")
@@ -104,8 +146,8 @@ def run_batch_test():
     print(f"\n3. Analyzing results...")
     results = batch_result.get("results", [])
     
-    if len(results) != len(ALL_SAMPLES):
-        print(f"⚠️  Warning: Expected {len(ALL_SAMPLES)} results, got {len(results)}")
+    if len(results) != len(all_samples):
+        print(f"⚠️  Warning: Expected {len(all_samples)} results, got {len(results)}")
     
     # Compare with expected results for samples that have them
     exact_matches = 0
@@ -116,13 +158,13 @@ def run_batch_test():
     print("-" * 50)
     
     for i, result in enumerate(results):
-        if i >= len(ALL_SAMPLES):
+        if i >= len(all_samples):
             break
             
-        sample = ALL_SAMPLES[i]
+        sample = all_samples[i]
         query = result.get("original_query", "")
         actual_filter = result.get("pinecone_filter", {})
-        expected_filter = sample.get("expected_filter", {})
+        expected_filter = sample.get("expected_results", {})
         
         print(f"\n[{i+1}] Query: {query}")
         print(f"    Generated: {json.dumps(actual_filter, indent=15)}")
@@ -155,7 +197,7 @@ def run_batch_test():
     print(f"Processing time: {processing_time:.2f} seconds")
     print(f"Average time per query: {processing_time/total_processed:.3f} seconds")
     
-    samples_with_expected = len([s for s in ALL_SAMPLES if "expected_filter" in s])
+    samples_with_expected = len([s for s in all_samples if "expected_results" in s])
     if samples_with_expected > 0:
         print(f"\nAccuracy (samples with expected results):")
         print(f"  ✅ Exact matches: {exact_matches}/{samples_with_expected} ({exact_matches/samples_with_expected*100:.1f}%)")
@@ -166,11 +208,11 @@ def run_batch_test():
         print(f"\n🎯 Overall Success Rate: {success_rate:.1f}%")
     
     # Save results to file
-    output_file = "batch_test_results.json"
+    output_file = "batch_query_test-results.json"
     with open(output_file, "w") as f:
         json.dump({
             "test_info": {
-                "total_queries": len(ALL_QUERIES),
+                "total_queries": len(all_queries),
                 "processing_time": processing_time,
                 "avg_time_per_query": processing_time/total_processed,
                 "exact_matches": exact_matches,
@@ -179,7 +221,7 @@ def run_batch_test():
                 "samples_with_expected": samples_with_expected
             },
             "batch_result": batch_result,
-            "samples": ALL_SAMPLES
+            "samples": all_samples
         }, f, indent=2)
     
     print(f"\n📄 Detailed results saved to: {output_file}")
@@ -191,11 +233,18 @@ def run_primary_samples_test():
     print("🎯 Testing Primary Samples (Project Requirements)")
     print("=" * 50)
     
+    # Load test samples
+    test_data = load_test_samples()
+    if not test_data:
+        print("❌ Failed to load test samples. Exiting.")
+        return
+    
     if not check_api_health():
         print("❌ API is not healthy. Please start the FastAPI server first.")
         return
     
-    primary_queries = [sample["query"] for sample in PRIMARY_SAMPLES]
+    primary_samples = get_primary_samples(test_data)
+    primary_queries = [sample["query"] for sample in primary_samples]
     batch_result = process_batch_queries(primary_queries)
     
     if "error" in batch_result:
@@ -204,12 +253,12 @@ def run_primary_samples_test():
     
     results = batch_result.get("results", [])
     
-    print(f"Processing {len(PRIMARY_SAMPLES)} primary test cases...")
+    print(f"Processing {len(primary_samples)} primary test cases...")
     all_passed = True
     
-    for i, (sample, result) in enumerate(zip(PRIMARY_SAMPLES, results)):
+    for i, (sample, result) in enumerate(zip(primary_samples, results)):
         query = sample["query"]
-        expected = sample["expected_filter"]
+        expected = sample["expected_results"]
         actual = result.get("pinecone_filter", {})
         
         print(f"\n[{i+1}] {query}")
