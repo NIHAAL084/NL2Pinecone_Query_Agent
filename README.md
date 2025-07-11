@@ -99,7 +99,7 @@ The CSV population script features:
 - **Beautiful Soup Integration** for robust HTML parsing
 - **Smart Content Selectors** with fallback strategies
 - **Content Cleaning** removes ads, navigation, and artifacts
-- **Metadata Preservation** while truncating embeddings for optimal performance
+- **Metadata Preservation** while truncating content before embeddings them optimal performance while it is saved as a whole
 - **Batch Processing** with progress tracking
 
 ### **Database Population Options**
@@ -124,7 +124,7 @@ make populate-db-csv
 ```
 
 - Scrapes real content from URLs in CSV file
-- Uses `sample_data.csv` by default (14 cricket articles included)
+- Uses `sample_data.csv` by default
 - Extracts and cleans web content using Beautiful Soup
 - Advanced tag normalization preserving event years
 - Supports custom CSV files with format: `pageURL,title,publishedDate,author,tags`
@@ -161,7 +161,7 @@ https://example.com/article,My Article Title,2024-03-15,John Doe,"AI,machine lea
 - ⚡ **Query Processing**: ~3.1 seconds per natural language query (with Gemini 2.5)
 - 🧠 **AI Accuracy**: Enhanced prompt engineering with 10 rules and 8 examples
 - 🔄 **Batch Processing**: 30 queries in batch mode (~3.1s per query)
-- 🌐 **Web Scraping**: 100% success rate on sample data (14/14 articles)
+- 🌐 **Web Scraping**: 100% success rate on sample data (15/15 articles)
 - 🐳 **Docker Build Time**: ~89 seconds (with layer caching)
 - 📦 **Container Size**: Optimized multi-stage build
 - 🛡️ **Security**: Non-root container user, health checks
@@ -248,7 +248,7 @@ echo "PINECONE_INDEX=your_index_name" >> .env
 ollama pull nomic-embed-text
 
 # Populate database with real content from CSV (recommended)
-make populate-db-csv     # Uses sample_data.csv (14 cricket articles)
+make populate-db-csv     # Uses sample_data.csv
 
 # Alternative: Populate with Gemini-generated content
 make populate-db         # Takes ~7 minutes due to rate limits
