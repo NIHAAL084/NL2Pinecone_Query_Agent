@@ -1,7 +1,7 @@
 # Makefile for NL2Pinecone Query Agent
 # Uses uv for fast dependency management
 
-.PHONY: help setup install run test test-batch test-primary health clean dev docker-build docker-run docker-stop docker-logs docker-status samples check-env populate-db populate-db-csv clear-db test-search test-all-endpoints
+.PHONY: help setup install run test test-batch test-primary health clean dev docker-build docker-run docker-stop docker-logs docker-status samples check-env populate-db populate-db-csv clear-db test-search test-all-endpoints sync freeze install-dev ci lint format format-check type-check env-create .env
 
 help: ## Show this help message
 	@echo "🤖 NL2Pinecone Query Agent - Available Commands"
@@ -46,7 +46,7 @@ help: ## Show this help message
 	@echo "Development:"
 	@echo "  clean         - Clean generated files"
 	@echo "  sync          - Sync dependencies with uv"
-	@echo "  freeze        - Generate requirements.txt"
+	@echo "  freeze        - Generate requirements-freeze.txt"
 	@echo "  env-create    - Create .env file from template"
 	@echo ""
 	@echo "💡 Make sure to set GEMINI_API_KEY in .env file!"
@@ -92,14 +92,14 @@ test: check-env ## Run individual query tests
 		-H "Content-Type: application/json" \
 		-d '{"query": "Anything by John Doe on vector search?"}' | jq .
 
-test-batch: check-env ## Run comprehensive batch tests (all samples)
+test-batch: check-env ## Run comprehensive batch tests (30 scenarios)
 	@echo "🧪 Running comprehensive batch tests..."
-	@echo "📊 Testing all samples from requirements and documentation"
+	@echo "📊 Testing all 30 scenarios with result validation"
 	uv run python test_batch-results.py
 
-test-primary: check-env ## Run primary requirement tests only
+test-primary: check-env ## Run primary requirement tests (batch queries)
 	@echo "🎯 Running primary requirement tests..."
-	@echo "📋 Testing core samples from project requirements"
+	@echo "📋 Testing core query conversion functionality"
 	uv run python test_batch-queries.py
 
 samples: ## Show all test samples
@@ -118,7 +118,11 @@ populate-db-csv: check-env ## Populate Pinecone database from CSV file
 	@echo "📊 Populating Pinecone database from CSV file..."
 	@echo "🌐 This will scrape content from URLs and may take several minutes"
 	@echo "📁 Using sample_data.csv by default (or specify: make populate-db-csv CSV_FILE=your_file.csv)"
-	uv run python populate_pinecone_db_with_csv.py $(CSV_FILE)
+	@if [ -n "$(CSV_FILE)" ]; then \
+		uv run python populate_pinecone_db_with_csv.py "$(CSV_FILE)"; \
+	else \
+		uv run python populate_pinecone_db_with_csv.py; \
+	fi
 
 clear-db: check-env ## Delete all records from Pinecone database
 	@echo "🗑️  Clearing all records from Pinecone database..."
@@ -179,7 +183,7 @@ test-all-endpoints: check-env ## Test all API endpoints comprehensively
 sync: ## Sync dependencies with uv
 	uv sync
 
-freeze: ## Generate requirements.txt from current environment
+freeze: ## Generate requirements-freeze.txt from current environment
 	uv pip freeze > requirements-freeze.txt
 
 install-dev: ## Install development dependencies
@@ -222,7 +226,6 @@ docker-status: ## Show Docker container status
 # Development utilities
 clean: ## Clean generated files
 	@echo "🧹 Cleaning generated files..."
-	rm -f batch_test_results.json
 	rm -f batch_query_test-results.json 
 	rm -f batch_results_test-results.json
 	rm -f requirements-freeze.txt

@@ -86,6 +86,7 @@ The system now features sophisticated tag normalization that:
 ### **Smart Query Understanding**
 
 The agent distinguishes between:
+
 - **Publication Dates**: "from 2025" → `published_year: 2025`
 - **Subject Matter**: "about IPL 2025" → `tags: ["IPL 2025"]`
 - **Author vs Topics**: "by John" vs "about John"
@@ -94,6 +95,7 @@ The agent distinguishes between:
 ### **Web Scraping & Content Extraction**
 
 The CSV population script features:
+
 - **Beautiful Soup Integration** for robust HTML parsing
 - **Smart Content Selectors** with fallback strategies
 - **Content Cleaning** removes ads, navigation, and artifacts
@@ -122,7 +124,7 @@ make populate-db-csv
 ```
 
 - Scrapes real content from URLs in CSV file
-- Uses `sample_data.csv` by default (15 cricket articles included)
+- Uses `sample_data.csv` by default (14 cricket articles included)
 - Extracts and cleans web content using Beautiful Soup
 - Advanced tag normalization preserving event years
 - Supports custom CSV files with format: `pageURL,title,publishedDate,author,tags`
@@ -159,7 +161,7 @@ https://example.com/article,My Article Title,2024-03-15,John Doe,"AI,machine lea
 - ⚡ **Query Processing**: ~3.1 seconds per natural language query (with Gemini 2.5)
 - 🧠 **AI Accuracy**: Enhanced prompt engineering with 10 rules and 8 examples
 - 🔄 **Batch Processing**: 30 queries in batch mode (~3.1s per query)
-- 🌐 **Web Scraping**: 100% success rate on sample data (15/15 articles)
+- 🌐 **Web Scraping**: 100% success rate on sample data (14/14 articles)
 - 🐳 **Docker Build Time**: ~89 seconds (with layer caching)
 - 📦 **Container Size**: Optimized multi-stage build
 - 🛡️ **Security**: Non-root container user, health checks
@@ -246,7 +248,7 @@ echo "PINECONE_INDEX=your_index_name" >> .env
 ollama pull nomic-embed-text
 
 # Populate database with real content from CSV (recommended)
-make populate-db-csv     # Uses sample_data.csv (15 cricket articles)
+make populate-db-csv     # Uses sample_data.csv (14 cricket articles)
 
 # Alternative: Populate with Gemini-generated content
 make populate-db         # Takes ~7 minutes due to rate limits
@@ -286,7 +288,7 @@ curl -X POST "http://localhost:8000/query" \
     "tags": {"$in": ["machine learning"]}
   },
   "is_valid": true,
-  "timestamp": "2025-07-09T10:37:34.959917"
+  "timestamp": "2025-07-11T10:37:34.959917"
 }
 ```
 
@@ -317,7 +319,7 @@ curl -X POST "http://localhost:8000/results" \
     }
   ],
   "total_results": 3,
-  "timestamp": "2025-07-09T10:42:06.229163"
+  "timestamp": "2025-07-11T10:42:06.229163"
 }
 ```
 
